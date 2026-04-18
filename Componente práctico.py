@@ -13,6 +13,11 @@
 import tkinter as tk 
 # importo loa funcion messagebox para mostrar mensajes emergentes
 from tkinter import messagebox
+# importo la biblioteca datetime para trabajar con fechas y horas
+from abc import ABC, abstractmethod
+# implemento la clase abstracta Software_FJ con un metodo abstracto mostrar_mensaje
+import datetime
+
 
 # defino la funcion para mostrar el mensaje de bienvenida, recibe como parametro el nombre del software
 def mostrar_mensaje(Software_FJ ):
