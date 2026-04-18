@@ -1,8 +1,13 @@
 # Fase-4---Componente-practico---Practicas-Simuladas
 # Grupo : 263
+# Programacion de Software FJ
 # Integrantes del grupo:
 # -Jhonier Alexander Maquilon Miranada 
 # -Luis Angel Savedra
+
+
+
+
 
 # importar la biblioteca de tkinter para crear la interfaz gráfica
 import tkinter as tk 
@@ -16,5 +21,7 @@ def mostrar_mensaje(Software_FJ ):
 
 # Creo la ventana principal de la apliacion y le asigno un titulo y un tamaño
 ventana = tk.Tk()   
+# asigno el titulo de la ventana y su tamaño
 ventana.title("Componente Práctico - Software FJ")
+# asigno el tamaño de la ventana
 ventana.geometry("300x200")
