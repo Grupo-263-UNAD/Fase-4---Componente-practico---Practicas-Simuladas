@@ -1,0 +1,29 @@
+        # Procesando reserva con polimorfismo y sobrecarga de métodos
+        try:
+            servicio_sala = SalaReunion("Sala Creativa", 120, capacidad=15)
+            cliente1 = clientes[0]
+            
+            reserva1 = Reserva(cliente1, servicio_sala, duracion_horas=4)
+            reserva1.confirmar_reserva()
+            
+            # Cálculo de costo con diferentes sobrecargas
+            costo_base = servicio_sala.calcular_costo(4)
+            costo_con_impuestos = servicio_sala.calcular_costo(4, impuestos=0.19)
+            costo_final = servicio_sala.calcular_costo(4, impuestos=0.19, descuento=0.10)
+            
+            print(f"Reserva confirmada - Costo base: ${costo_base} | Con impuestos: ${costo_con_impuestos} | Final: ${costo_final}")
+            
+            # Intento de reserva inválida para probar excepciones
+            reserva_invalida = Reserva(cliente1, servicio_sala, duracion_horas=-3)
+            
+        except DuracionInvalidaError as e:
+            log_error(e, "Intento de crear reserva con duración negativa")
+            print(f"Error controlado: {e}")
+        except ServicioNoDisponibleError as e:
+            log_error(e, "Servicio no disponible en el horario solicitado")
+        except Exception as e:
+            log_error(e, "Error inesperado al procesar reserva", exc_info=True)
+        else:
+            print("Reserva procesada correctamente sin excepciones.")
+        finally:
+            print("Finalizó el bloque de procesamiento de reserva.\n") 
