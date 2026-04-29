@@ -110,4 +110,238 @@ class Reserva:
     # y por ultimo se asigna el estado inicial de la reserva como "Pendiente".
         self.estado = "Pendiente"
     # Articulo log para registrar la creación de la reserva en el sistema , lo que facilita el seguimiento de las acciones realizadas por los usuarios.
-    log_event("Reserva creada")
+    log_event("Reserva creada") 
+from abc import ABC, abstractmethod
+import datetime
+
+LOG_FILE = "logs_software_fj.txt"
+
+def log_event(msg):
+    time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    with open(LOG_FILE, "a", encoding="utf-8") as f:
+        f.write(f"[{time}] {msg}\n")
+
+class ClienteError(Exception):
+    pass
+
+class ReservaError(Exception):
+    pass
+
+class ServicioError(Exception):
+    pass
+
+class Entidad(ABC):
+    def __init__(self, id):
+        self.id = id
+
+    @abstractmethod
+    def descripcion(self):
+        pass
+
+class Cliente(Entidad):
+    def __init__(self, nombre, documento):
+        super().__init__(documento)
+        try:
+            if not nombre or len(nombre) < 3:
+                raise ClienteError("Nombre inválido")
+
+            if not str(documento).isdigit():
+                raise ClienteError("Documento inválido")
+
+            self.__nombre = nombre
+            self.__documento = documento
+
+            log_event(f"Cliente creado: {nombre}")
+
+        except Exception as e:
+            log_event(f"Error cliente: {e}")
+            raise ClienteError(str(e)) from e
+
+    def get_nombre(self):
+        return self.__nombre
+
+    def descripcion(self):
+        return f"Cliente: {self.__nombre}"
+
+class Servicio(ABC):
+    def __init__(self, nombre):
+        self.nombre = nombre
+
+    @abstractmethod
+    def calcular_costo(self, horas, **kwargs):
+        pass
+
+    @abstractmethod
+    def descripcion(self):
+        pass
+
+    @abstractmethod
+    def validar_parametros(self, **kwargs):
+        pass
+
+class ReservaSala(Servicio):
+    def __init__(self, tipo_sala):
+        super().__init__("Reserva de Sala")
+        self.tipo_sala = tipo_sala
+
+    def calcular_costo(self, horas, **kwargs):
+        tarifa = 50000 if self.tipo_sala == "premium" else 30000
+        return tarifa * horas
+
+    def descripcion(self):
+        return f"Sala tipo {self.tipo_sala}"
+
+    def validar_parametros(self, **kwargs):
+        if self.tipo_sala not in ["normal", "premium"]:
+            raise ServicioError("Tipo de sala inválido")
+
+class AlquilerEquipo(Servicio):
+    def __init__(self, equipo):
+        super().__init__("Alquiler de Equipo")
+        self.equipo = equipo
+
+    def calcular_costo(self, horas, **kwargs):
+        precios = {"pc": 20000, "proyector": 15000}
+        if self.equipo not in precios:
+            raise ServicioError("Equipo no disponible")
+        return precios[self.equipo] * horas
+
+    def descripcion(self):
+        return f"Alquiler de {self.equipo}"
+
+    def validar_parametros(self, **kwargs):
+        if not self.equipo:
+            raise ServicioError("Equipo inválido")
+
+class Asesoria(Servicio):
+    def __init__(self, especialidad):
+        super().__init__("Asesoría")
+        self.especialidad = especialidad
+
+    def calcular_costo(self, horas, **kwargs):
+        return 80000 * horas
+
+    def descripcion(self):
+        return f"Asesoría en {self.especialidad}"
+
+    def validar_parametros(self, **kwargs):
+        if not self.especialidad:
+            raise ServicioError("Especialidad requerida")
+
+class Reserva:
+    def __init__(self, cliente, servicio, horas):
+        try:
+            if not isinstance(cliente, Cliente):
+                raise ReservaError("Cliente inválido")
+
+            if not isinstance(servicio, Servicio):
+                raise ReservaError("Servicio inválido")
+
+            if horas <= 0:
+                raise ReservaError("Horas inválidas")
+
+            self.cliente = cliente
+            self.servicio = servicio
+            self.horas = horas
+            self.estado = "Pendiente"
+
+            log_event("Reserva creada")
+
+        except Exception as e:
+            log_event(f"Error creando reserva: {e}")
+            raise
+
+    def confirmar(self):
+        try:
+            if self.estado != "Pendiente":
+                raise ReservaError("No se puede confirmar")
+
+            self.servicio.validar_parametros()
+            costo = self.servicio.calcular_costo(self.horas)
+
+            self.estado = "Confirmada"
+            log_event(f"Reserva confirmada - Costo: {costo}")
+
+        except Exception as e:
+            log_event(f"Error al confirmar reserva: {e}")
+            raise
+
+    def cancelar(self):
+        try:
+            if self.estado == "Cancelada":
+                raise ReservaError("Ya está cancelada")
+
+            self.estado = "Cancelada"
+            log_event("Reserva cancelada")
+
+        except Exception as e:
+            log_event(f"Error cancelando reserva: {e}")
+
+    def procesar(self):
+        try:
+            self.confirmar()
+        except Exception as e:
+            log_event(f"Fallo en procesamiento: {e}")
+        finally:
+            log_event("Proceso de reserva finalizado")
+
+def main():
+    clientes = []
+    reservas = []
+
+    try:
+        c1 = Cliente("Luis", "12345")
+        clientes.append(c1)
+    except:
+        pass
+
+    try:
+        c2 = Cliente("Lu", "abc")
+    except:
+        pass
+
+    s1 = ReservaSala("premium")
+
+    try:
+        s2 = ReservaSala("vip")
+        s2.validar_parametros()
+    except:
+        log_event("Servicio inválido detectado")
+
+    try:
+        r1 = Reserva(c1, s1, 2)
+        r1.procesar()
+        reservas.append(r1)
+    except:
+        pass
+
+    try:
+        r2 = Reserva(c1, s1, -1)
+    except:
+        pass
+
+    s3 = AlquilerEquipo("pc")
+
+    try:
+        r3 = Reserva(c1, s3, 3)
+        r3.procesar()
+    except:
+        pass
+
+    try:
+        s4 = AlquilerEquipo("tablet")
+        s4.calcular_costo(2)
+    except:
+        log_event("Error equipo no disponible")
+
+    try:
+        s5 = Asesoria("software")
+        r5 = Reserva(c1, s5, 1)
+        r5.procesar()
+    except:
+        pass
+
+    print("Simulación finalizada sin detener el sistema")
+
+if __name__ == "__main__":
+    main()
