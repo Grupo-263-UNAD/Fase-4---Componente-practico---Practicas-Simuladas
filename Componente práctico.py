@@ -109,3 +109,5 @@ class Reserva:
         self.horas = horas
     # y por ultimo se asigna el estado inicial de la reserva como "Pendiente".
         self.estado = "Pendiente"
+    # Articulo log para registrar la creación de la reserva en el sistema , lo que facilita el seguimiento de las acciones realizadas por los usuarios.
+    log_event("Reserva creada")
