@@ -53,8 +53,8 @@ class Cliente(Entidad):
 
     # constructor del cliente con validaciones y manejo de errores
     def __init__(self, nombre, documento):
-        # uso documento como id único del cliente para la clase base Entidad
-        super().__init__(id=documento)  
+        # identtificador del cliente se asigna al documento para garantizar unicidad y facilitar búsquedas
+        super().__init__(documento)  
 
         try:
             # valido nombre mínimo 3 caracteres
@@ -79,7 +79,7 @@ class Cliente(Entidad):
             log_event(f"Error cliente: {e}")
 
             # relanzo error para que pueda ser manejado por quien instancie la clase
-            raise
+            raise ClienteError("Error al crear cliente") from e
 
     # obtengo nombre del cliente con método getter
     def get_nombre(self):
