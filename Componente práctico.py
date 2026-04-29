@@ -90,3 +90,13 @@ class Cliente(Entidad):
     def descripcion(self):
         # retorno una cadena con el nombre del cliente para cumplir con la interfaz definida en la clase base
         return f"Cliente: {self.__nombre}"
+    
+    # implementación de clsase Reserva que representa una reserva de servicio realizada por un cliente.
+
+    def __init__(self, cliente, servicio, horas):
+    # constructor de la reserva con validaciones y manejo de errore.
+        if horas <= 0:
+    #log de error si las horas no son válidas.
+            log_event("Error horas inválidas")
+    #raise de error si las horas no son válidas para que pueda ser manejado por quien instancie la clase.
+            raise ReservaError("Horas inválidas")
