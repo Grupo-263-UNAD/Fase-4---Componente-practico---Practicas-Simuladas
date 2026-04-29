@@ -83,8 +83,10 @@ class Cliente(Entidad):
 
     # obtengo nombre del cliente con método getter
     def get_nombre(self):
+        # retorno el nombre del cliente para que pueda ser accedido de forma controlada
         return self.__nombre
 
     # implementación de método abstracto descripción para mostrar información del cliente
     def descripcion(self):
+        # retorno una cadena con el nombre del cliente para cumplir con la interfaz definida en la clase base
         return f"Cliente: {self.__nombre}"
