@@ -45,3 +45,42 @@ class Entidad(ABC):
     @abstractmethod
     def descripcion(self):
         pass
+    
+# implemento clase Cliente que hereda de Entidad
+class Cliente(Entidad):
+
+    # constructor del cliente con validaciones y manejo de errores
+    def __init__(self, nombre, documento):
+
+        try:
+            # valido nombre mínimo 3 caracteres
+            if not nombre or len(nombre) < 3:
+                raise ClienteError("Nombre inválido")
+
+            # valido que documento sea numérico y no esté vacío
+            if not str(documento).isdigit():
+                raise ClienteError("Documento inválido")
+
+            # guardo nombre atributo privado
+            self.__nombre = nombre
+
+            # guardo documento atributo privado
+            self.__documento = documento
+
+            # registro la creación del cliente en logs
+            log_event(f"Cliente creado: {nombre}")
+
+        except Exception as e:
+            # registro error en logs si ocurre una excepción
+            log_event(f"Error cliente: {e}")
+
+            # relanzo error para que pueda ser manejado por quien instancie la clase
+            raise
+
+    # obtengo nombre del cliente con método getter
+    def get_nombre(self):
+        return self.__nombre
+
+    # implementación de método abstracto descripción para mostrar información del cliente
+    def descripcion(self):
+        return f"Cliente: {self.__nombre}"
