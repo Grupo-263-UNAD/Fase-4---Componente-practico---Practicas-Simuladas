@@ -7,7 +7,7 @@
 # Trabajo colaborativo.
 # 12 de  mayo de 2026
 
-# importo ABC para crear clases abstractas y abstractmethod para definir métodos que deben ser implementados por las clases que hereden de la clase base
+# importo herramientas para clases abstractas
 from abc import ABC, abstractmethod
 
 # importo datetime para manejar fechas en logs y facilitar el seguimiento de eventos en el sistema
@@ -79,7 +79,7 @@ class Cliente(Entidad):
             log_event(f"Error cliente: {e}")
 
             # relanzo error para que pueda ser manejado por quien instancie la clase
-            raise ClienteError("Error al crear cliente") from e
+            raise ClienteError(str(e)) from e
 
     # obtengo nombre del cliente con método getter
     def get_nombre(self):
@@ -92,7 +92,8 @@ class Cliente(Entidad):
         return f"Cliente: {self.__nombre}"
     
     # implementación de clsase Reserva que representa una reserva de servicio realizada por un cliente.
-
+class Reserva:
+        
     def __init__(self, cliente, servicio, horas):
     # constructor de la reserva con validaciones y manejo de errore.
         if horas <= 0:
@@ -100,3 +101,11 @@ class Cliente(Entidad):
             log_event("Error horas inválidas")
     #raise de error si las horas no son válidas para que pueda ser manejado por quien instancie la clase.
             raise ReservaError("Horas inválidas")
+    # Tutor en esta línea se asigna el cliente a la reserva para establecer la relación entre ambos.
+        self.cliente = cliente
+    # siguiente línea se asigna el servicio a la reserva para definir qué servicio se ha reservado.
+        self.servicio = servicio
+    # Consiguiente esta parte se asigna la cantidad de horas a la reserva para especificar la duración del servicio reservado.
+        self.horas = horas
+    # y por ultimo se asigna el estado inicial de la reserva como "Pendiente".
+        self.estado = "Pendiente"
