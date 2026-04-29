@@ -5,6 +5,8 @@
 # Luis Angel Savedra
 # Tutor: Juan Pablo Arango Cardona
 
+
+
 # importo ABC para crear clases abstractas
 from abc import ABC, abstractmethod
 
@@ -25,14 +27,21 @@ def log_event(msg):
         # escribo el mensaje con la fecha
         f.write(f"[{time}] {msg}\n")
 
-# excepción para errores de cliente
+# implemento excepción para errores de cliente
 class ClienteError(Exception):
     pass
 
-# excepción para errores de servicio
+# implemento excepción para errores de servicio
 class ServicioError(Exception):
     pass
 
-# excepción para errores de reserva
+# implemento excepción para errores de reserva
 class ReservaError(Exception):
     pass
+# uso la clase base obligatoria para entidades del sistema 
+class Entidad(ABC):
+
+    # ingreso método abstracto que obliga a implementar descripción
+    @abstractmethod
+    def descripcion(self):
+        pass
