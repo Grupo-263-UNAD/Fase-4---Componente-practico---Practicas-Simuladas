@@ -3,6 +3,8 @@
 # Integrantes:
 # Jhonier Alexander Maquilon Miranda 
 # Luis Angel Savedra Linares
+# Programa : Ingenieria de sistemas.
+# Curso : Programacion Orientada a Objetos.
 # Tutor: Juan Pablo Arango Cardona
 # Trabajo colaborativo.
 # 12 de  mayo de 2026
@@ -285,6 +287,8 @@ class Sistema:
         if not any(c.id == cliente.id for c in self.clientes):
             self.clientes.append(cliente)
             log_event("Cliente agregado al sistema")
+        else:
+            log_event("Cliente ya existe en el sistema")
     # método para agregar un servicio al sistema con validación para evitar duplicados
     def agregar_reserva(self, reserva):
         self.reservas.append(reserva)
@@ -313,3 +317,8 @@ class Sistema:
     def calcular_total_reservas(self):
         # Retorno la suma de los costos de tiodas las reservas reazadas.
         return sum(r.costo or 0 for r in self.reservas)
+    
+    
+    
+    """Conclusion El sistema presentado por nuerstro grupo permite gestionar clientes, servicios y reservas aplicando POO,Programacion Orientada a Objetos
+    manejo de excepciones y registro de eventos."""
