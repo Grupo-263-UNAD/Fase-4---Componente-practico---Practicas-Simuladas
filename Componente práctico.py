@@ -84,28 +84,23 @@ class Cliente(Entidad):
     # retorno una cadena con el nombre del cliente para cumplir con la interfaz definida en la clase base
         return f"Cliente: {self.__nombre}"
     
-# Creo la clase servicio .
+    # Creo la clase servicio .
 class Servicio(ABC): 
     # Constructor que recibe el nombre del servicio
     def __init__(self, nombre):
-    # Guardo el nombre del servicio en un atributo de la clase 
         self.nombre = nombre  
-    # Indico que este método debe ser obligatorio en las clases hijas
+    #Pongo el método obligatorio para calcular el costo del servicio
     @abstractmethod  
     def calcular_costo(self, horas, **kwargs):
         pass
-    # Método obligatorio para calcular el costo del servicio
+    #Pongo el método obligatorio para describir el servicio
     @abstractmethod 
-    # Devuelve una descripción del servicio
     def descripcion(self):
         pass 
-    # Método obligatorio para validar parámetros del servicio
+    # Articulo el Método obligatorio para validar parámetros del servicio
     @abstractmethod  
-    # Valida que los datos del servicio sean correctos
     def validar_parametros(self, **kwargs): 
-    # Cada servicio define sus reglas
-        pass 
-    
+        pass
     
 # Creo la clase ReservaSala que hereda de Servicio
 class ReservaSala(Servicio):  
@@ -184,14 +179,17 @@ class Asesoria(Servicio):
         if descuento > 0:
         # aplico el descuento al total, reduciendo el costo según el porcentaje indicado
             total -= total * (descuento / 100)
-
+        # Retorno el costo totaldespues de aplicar el descuento.
         return total
-
+    # Defino el metodo descripcion para mostrar la especialidad de la asesoría contratada
     def descripcion(self):
+        #Retorno una cadena.
         return f"Asesoría en {self.especialidad}"
-
+    # Defino el metodo para validar los parámetros de la asesoría, en este caso, verificando que se haya especificado una especialidad válida.
     def validar_parametros(self, **kwargs):
+        #Si no es especifica la especialidad lanzo un error para que pueda ser manejado por quien instancie la clase.
         if not self.especialidad:
+    # Pongo el servicio de error si no especifica la espçialidad.
             raise ServicioError("Especialidad requerida")
 
 # clase que representa una reserva en el sistema
@@ -291,9 +289,9 @@ class Sistema:
         self.reservas = []
     # método para agregar un cliente al sistema con validación para evitar duplicados
     def agregar_cliente(self, cliente):
-        if cliente not in self.clientes:
+        if not any(c.id == cliente.id for c in self.clientes):
             self.clientes.append(cliente)
-            log_event("Cliente agregado al sistema")
+        log_event("Cliente agregado al sistema")
     # método para agregar un servicio al sistema con validación para evitar duplicados
     def agregar_reserva(self, reserva):
         self.reservas.append(reserva)
@@ -318,3 +316,5 @@ class Sistema:
             if cliente.id == documento:
                 return cliente
         return None
+    def calcular_total_reservas(self):
+        return sum(r.costo or 0 for r in self.reservas)
