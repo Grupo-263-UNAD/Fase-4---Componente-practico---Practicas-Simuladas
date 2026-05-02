@@ -168,33 +168,31 @@ class AlquilerEquipo(Servicio):
         
 # clase que representa servicio de asesoría especializado
 class Asesoria(Servicio):
-
-    # constructor de la clase Asesoria
+    # implemento el constructor que recibe especialida y asigna el nombre del servicio
     def __init__(self, especialidad):
-    # llamo al constructor de la clase padre Servicio
+    # llmo al constructor padre para asignar el nombre del servicio y guardo la especialidad para cálculos y validaciones posteriores
         super().__init__("Asesoría")
-    # guardo la especialidad del servicio (ej: matemáticas, programación, redes)
+    # guardo la especialidad del servicio para su uso en cálculos de costo y descripción del servicio
         self.especialidad = especialidad
-    # método para calcular el costo del servicio según horas
+    #articulo metodo para calcular el costo de la asesoría según horas y aplicando un posible descuento
     def calcular_costo(self, horas, **kwargs):
-        # retorno el costo fijo por hora multiplicado por las horas solicitadas
-        return 80000 * horas
-    # método que describe el servicio de asesoría
-    def descripcion(self):
-        # retorno una descripción clara indicando la especialidad
-        return f"Asesoría en {self.especialidad}"
-    # método para validar que los parámetros del servicio sean correctos
-    def validar_parametros(self, **kwargs):
-    # verifico que la especialidad no esté vacía o nula
-        if not self.especialidad:
-    # lanzo error si la especialidad no es válida
-            raise ServicioError("Especialidad requerida")
-        # método para calcular el costo del servicio con opción de descuento
-    def calcular_costo(self, horas, descuento=0):
+    # obtengo el descuento del diccionario de argumentos, si no se especifica, se asume 0
+        descuento = kwargs.get("descuento", 0)
+    # calculo el costo total multiplicando la tarifa fija por las horas y aplicando el descuento si es mayor a 0
         total = 80000 * horas
+        # si hay un descuento, lo aplico al total restando el porcentaje correspondiente
         if descuento > 0:
+        # aplico el descuento al total, reduciendo el costo según el porcentaje indicado
             total -= total * (descuento / 100)
+
         return total
+
+    def descripcion(self):
+        return f"Asesoría en {self.especialidad}"
+
+    def validar_parametros(self, **kwargs):
+        if not self.especialidad:
+            raise ServicioError("Especialidad requerida")
 
 # clase que representa una reserva en el sistema
 class Reserva:
