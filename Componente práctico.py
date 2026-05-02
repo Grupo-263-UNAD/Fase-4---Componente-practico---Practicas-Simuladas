@@ -320,5 +320,7 @@ class Sistema:
     
     
     
-    """Conclusion El sistema presentado por nuerstro grupo permite gestionar clientes, servicios y reservas aplicando POO,Programacion Orientada a Objetos
-    manejo de excepciones y registro de eventos."""
+"""
+Conclusión: El sistema desarrollado por nuestro grupo permite gestionar clientes, servicios y reservas aplicando Programación Orientada a Objetos,
+manejo de excepciones y registro de eventos, garantizando una estructura modular y funcional.
+"""
