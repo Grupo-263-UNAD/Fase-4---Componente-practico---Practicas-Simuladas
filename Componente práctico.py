@@ -1,21 +1,21 @@
 # Fase-4---Componente-practico---Practicas-Simuladas
 # Grupo : 263
 # Integrantes:
-# Jhonier Alexander Maquilon Miranada 
+# Jhonier Alexander Maquilon Miranda 
 # Luis Angel Savedra Linares
 # Tutor: Juan Pablo Arango Cardona
 # Trabajo colaborativo.
 # 12 de  mayo de 2026
 
-# importo herramientas para clases abstractas
+    # importo herramientas para clases abstractas
 from abc import ABC, abstractmethod
 
-# importo datetime para manejar fechas en logs y facilitar el seguimiento de eventos en el sistema
+    # importo datetime para manejar fechas en logs y facilitar el seguimiento de eventos en el sistema
 import datetime
-# defino el archivo donde se guardarán los eventos del sistema 
+    # defino el archivo donde se guardarán los eventos del sistema 
 LOG_FILE = "logs_software_fj.txt"
 
-# creo función para registrar eventos en el sistema con formato de fecha y hora para facilitar el seguimiento de acciones y errores
+    # creo función para registrar eventos en el sistema con formato de fecha y hora para facilitar el seguimiento de acciones y errores
 def log_event(msg):
 
     # obtengo la fecha y hora actual
@@ -24,19 +24,19 @@ def log_event(msg):
     # abro el archivo de logs en modo escritura acumulativa y con codificación utf-8 para evitar problemas con caracteres especiales
     with open(LOG_FILE, "a", encoding="utf-8") as f:
 
-        # escribo el mensaje con la fecha y hora en el formato definido
+    # escribo el mensaje con la fecha y hora en el formato definido
         f.write(f"[{time}] {msg}\n")
         
         
 
-# implemento excepción para errores de cliente
+    # implemento excepción para errores de cliente
 class ClienteError(Exception):
     pass
 
-# implemento excepción para errores de servicio
+    # implemento excepción para errores de servicio
 class ReservaError(Exception):
     pass
-# implemento excepción para errores de servicio
+    # implemento excepción para errores de servicio
 class ServicioError(Exception):
     pass
 
@@ -46,76 +46,45 @@ class Entidad(ABC):
     def __init__(self, id):
         self.id = id
 
-    # método obligatorio
+    # método obligatorio para describir la entidad.
     @abstractmethod
     def descripcion(self):
         pass
     
-# implemento clase Cliente que hereda de Entidad
+    # implemento clase Cliente que hereda de Entidad
 class Cliente(Entidad):
-
     # constructor del cliente con validaciones y manejo de errores
     def __init__(self, nombre, documento):
-        # identtificador del cliente se asigna al documento para garantizar unicidad y facilitar búsquedas
+    # identtificador del cliente se asigna al documento para garantizar unicidad y facilitar búsquedas
         super().__init__(documento)  
-
         try:
-            # valido nombre mínimo 3 caracteres
+    # valido nombre mínimo 3 caracteres
             if not nombre or len(nombre) < 3:
                 raise ClienteError("Nombre inválido")
-
-            # valido que documento sea numérico y no esté vacío
+    # valido que documento sea numérico y no esté vacío
             if not str(documento).isdigit():
                 raise ClienteError("Documento inválido")
-
-            # guardo nombre atributo privado
+    # guardo nombre atributo privado
             self.__nombre = nombre
-
-            # guardo documento atributo privado
+    # guardo documento atributo privado
             self.__documento = documento
-
-            # registro la creación del cliente en logs
+    # registro la creación del cliente en logs
             log_event(f"Cliente creado: {nombre}")
-
         except Exception as e:
-            # registro error en logs si ocurre una excepción
+    # registro error en logs si ocurre una excepción
             log_event(f"Error cliente: {e}")
-
-            # relanzo error para que pueda ser manejado por quien instancie la clase
+    # relanzo error para que pueda ser manejado por quien instancie la clase
             raise ClienteError(str(e)) from e
-
     # obtengo nombre del cliente con método getter
     def get_nombre(self):
-        # retorno el nombre del cliente para que pueda ser accedido de forma controlada
+    # retorno el nombre del cliente para que pueda ser accedido de forma controlada
         return self.__nombre
-
     # implementación de método abstracto descripción para mostrar información del cliente
     def descripcion(self):
-        # retorno una cadena con el nombre del cliente para cumplir con la interfaz definida en la clase base
+    # retorno una cadena con el nombre del cliente para cumplir con la interfaz definida en la clase base
         return f"Cliente: {self.__nombre}"
     
-    # implementación de clsase Reserva que representa una reserva de servicio realizada por un cliente.
-class Reserva:
-        
-    def __init__(self, cliente, servicio, horas):
-    # constructor de la reserva con validaciones y manejo de errore.
-        if horas <= 0:
-    #log de error si las horas no son válidas.
-            log_event("Error horas inválidas")
-    #raise de error si las horas no son válidas para que pueda ser manejado por quien instancie la clase.
-            raise ReservaError("Horas inválidas")
-    # Tutor en esta línea se asigna el cliente a la reserva para establecer la relación entre ambos.
-        self.cliente = cliente
-    # siguiente línea se asigna el servicio a la reserva para definir qué servicio se ha reservado.
-        self.servicio = servicio
-    # Consiguiente esta parte se asigna la cantidad de horas a la reserva para especificar la duración del servicio reservado.
-        self.horas = horas
-    # y por ultimo se asigna el estado inicial de la reserva como "Pendiente".
-        self.estado = "Pendiente"
-    # Articulo log para registrar la creación de la reserva en el sistema , lo que facilita el seguimiento de las acciones realizadas por los usuarios.
-        log_event("Reserva creada") 
-    # Defino una clase abstracta llamada Servicio que servirá como base para otros servicios
-    
+# Creo la clase servicio .
 class Servicio(ABC): 
     # Constructor que recibe el nombre del servicio
     def __init__(self, nombre):
@@ -130,8 +99,9 @@ class Servicio(ABC):
     # Método obligatorio para describir el servicio
     @abstractmethod 
     # Devuelve una descripción del servicio
+    #Se implementa en cada clase hija para dar detalles específicos del servicio
     def descripcion(self):
-    # Se implementa en cada clase hija para dar detalles específicos del servicio
+        
         pass 
     # Método obligatorio para validar parámetros del servicio
     @abstractmethod  
@@ -139,8 +109,9 @@ class Servicio(ABC):
     def validar_parametros(self, **kwargs): 
     # Cada servicio define sus reglas
         pass 
-    # Creo la clase ReservaSala que hereda de Servicio
     
+    
+# Creo la clase ReservaSala que hereda de Servicio
 class ReservaSala(Servicio):  
     # Constructor que recibe el tipo de sala (ya sea normal o premium)
     def __init__(self, tipo_sala):
@@ -155,13 +126,13 @@ class ReservaSala(Servicio):
         elif self.tipo_sala == "normal":
             tarifa = 30000
         else:
-        # Defino tarifa según tipo de sala y si el tipo no es válido, lanzo un error para que pueda ser manejado por quien instancie la clase.
+    # Defino tarifa según tipo de sala y si el tipo no es válido, lanzo un error para que pueda ser manejado por quien instancie la clase.
             raise ServicioError("Tipo de sala inválido") 
-        # Retorno el costo total multiplicando tarifa por horas
+    # Retorno el costo total multiplicando tarifa por horas
         return tarifa * horas  
     # Método que describe el servicio
     def descripcion(self): 
-        # Retorno el tipo de sala como texto para dar una descripción clara del servicio reservado
+    # Retorno el tipo de sala como texto para dar una descripción clara del servicio reservado
         return f"Sala tipo {self.tipo_sala}"  
     # Método para validar el tipo de sala
     def validar_parametros(self, **kwargs): 
@@ -169,8 +140,8 @@ class ReservaSala(Servicio):
         if self.tipo_sala not in ["normal", "premium"]:  
             # Lanzo error si no es válido
             raise ServicioError("Tipo de sala inválido")  
-    # Clase que representa alquiler de equipos
-    
+        
+    # Clase que representa alquiler de equipos como servicio.
 class AlquilerEquipo(Servicio): 
     #Uso el Constructor que recibe el equipo
     def __init__(self, equipo):
@@ -194,8 +165,119 @@ class AlquilerEquipo(Servicio):
         return f"Alquiler de {self.equipo}"  
     # Validación de equipo
     def validar_parametros(self, **kwargs):  
-        # Si no hay equipo
+    # Si no hay equipo
         if not self.equipo:
-        # Error si no se especifica el equipo para alquiler, lo que es necesario para calcular el costo y describir el servicio correctamente.  
+    # Error si no se especifica el equipo para alquiler, lo que es necesario para calcular el costo y describir el servicio correctamente.  
             raise ServicioError("Equipo inválido") 
+        
+# clase que representa servicio de asesoría especializado
+class Asesoria(Servicio):
+
+    # constructor de la clase Asesoria
+    def __init__(self, especialidad):
+    # llamo al constructor de la clase padre Servicio
+        super().__init__("Asesoría")
+    # guardo la especialidad del servicio (ej: matemáticas, programación, redes)
+        self.especialidad = especialidad
+    # método para calcular el costo del servicio según horas
+    def calcular_costo(self, horas, **kwargs):
+        # retorno el costo fijo por hora multiplicado por las horas solicitadas
+        return 80000 * horas
+    # método que describe el servicio de asesoría
+    def descripcion(self):
+        # retorno una descripción clara indicando la especialidad
+        return f"Asesoría en {self.especialidad}"
+    # método para validar que los parámetros del servicio sean correctos
+    def validar_parametros(self, **kwargs):
+    # verifico que la especialidad no esté vacía o nula
+        if not self.especialidad:
+    # lanzo error si la especialidad no es válida
+            raise ServicioError("Especialidad requerida")
+
+# clase que representa una reserva en el sistema
+class Reserva:
+    # constructor de la reserva
+    def __init__(self, cliente, servicio, horas):
+        self.costo = None  # inicializo el costo como None para que se calcule al confirmar la reserva
+        try:
+    # valido que el cliente sea una instancia válida de la clase Cliente
+            if not isinstance(cliente, Cliente):
+                raise ReservaError("Cliente inválido")
+    # valido que el servicio sea una instancia válida de Servicio
+            if not isinstance(servicio, Servicio):
+                raise ReservaError("Servicio inválido")
+    # valido que las horas sean mayores a 0
+            if horas <= 0:
+                raise ReservaError("Horas inválidas")
+    # guardo el cliente dentro de la reserva
+            self.cliente = cliente
+    # guardo el servicio contratado
+            self.servicio = servicio
+    # guardo la cantidad de horas de la reserva
+            self.horas = horas
+    # estado inicial de la reserva
+            self.estado = "Pendiente"
+    # registro en el archivo de logs la creación de la reserva
+            log_event("Reserva creada correctamente")
+        except Exception as e:
+    # registro cualquier error ocurrido en la creación
+            log_event(f"Error creando reserva: {e}")
+    # relanzo el error para que sea manejado externamente
+            raise
+    # método para confirmar la reserva
+    def confirmar(self):
+        try:
+    # verifico que la reserva esté en estado pendiente
+            if self.estado != "Pendiente":
+                raise ReservaError("No se puede confirmar")
+    # valido los parámetros del servicio antes de usarlo
+            self.servicio.validar_parametros()
+    # calculo el costo total del servicio según las horas
+            costo = self.servicio.calcular_costo(self.horas)
+    # cambio el estado de la reserva a confirmada
+            self.estado = "Confirmada"
+    # guardo el costo calculado dentro del objeto reserva
+            self.costo = costo
+    # registro la confirmación en logs con el costo
+            log_event(f"Reserva confirmada - Costo: {costo}")
+        except Exception as e:
+    # registro el error ocurrido durante la confirmación
+            log_event(f"Error al confirmar reserva: {e}")
+    # relanzo el error para ser mas específico y permitir control externo
+            raise
+    # método para cancelar la reserva
+    def cancelar(self):
+        try:
+    # verifico si la reserva ya está cancelada
+            if self.estado == "Cancelada":
+                raise ReservaError("Ya está cancelada")
+    # cambio el estado a cancelada
+            self.estado = "Cancelada"
+    # registro la cancelación en logs
+            log_event("Reserva cancelada")
+        except Exception as e:
+    # registro el error de cancelación
+            log_event(f"Error cancelando reserva: {e}")
+    # relanzo el error para control externo
+            raise   # importante mantenerlo para que quien use el método pueda manejar la excepción si lo desea
+    # método que ejecuta el proceso completo de la reserva
+    def procesar(self):
+        try:
+    # intento confirmar la reserva automáticamente
+            self.confirmar()
+        except Exception as e:
+    # registro cualquier fallo en el procesamiento
+            log_event(f"Fallo en procesamiento: {e}")
+        finally:
+    # este bloque siempre se ejecuta pase lo que pase
+            log_event("Proceso de reserva finalizado")
+    # método que devuelve un resumen de la reserva
+    def obtener_resumen(self):
+        return {
+            "cliente": self.cliente.get_nombre(),
+            "servicio": self.servicio.descripcion(),
+            "horas": self.horas,
+            "estado": self.estado,
+            "costo": getattr(self, "costo", None)
+        }
         

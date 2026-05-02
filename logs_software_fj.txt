@@ -15,3 +15,7 @@
 [2026-04-29 23:41:20] Reserva creada
 [2026-04-29 23:41:20] Reserva confirmada - Costo: 80000
 [2026-04-29 23:41:20] Proceso de reserva finalizado
+[2026-05-02 01:32:17] Cliente creado: Jhonier
+[2026-05-02 01:32:17] Reserva creada correctamente
+[2026-05-02 01:32:17] Reserva confirmada - Costo: 240000
+[2026-05-02 01:32:17] Proceso de reserva finalizado
