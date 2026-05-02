@@ -9,21 +9,16 @@
 
     # importo herramientas para clases abstractas
 from abc import ABC, abstractmethod
-
     # importo datetime para manejar fechas en logs y facilitar el seguimiento de eventos en el sistema
 import datetime
     # defino el archivo donde se guardarán los eventos del sistema 
 LOG_FILE = "logs_software_fj.txt"
-
     # creo función para registrar eventos en el sistema con formato de fecha y hora para facilitar el seguimiento de acciones y errores
 def log_event(msg):
-
     # obtengo la fecha y hora actual
     time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
     # abro el archivo de logs en modo escritura acumulativa y con codificación utf-8 para evitar problemas con caracteres especiales
     with open(LOG_FILE, "a", encoding="utf-8") as f:
-
     # escribo el mensaje con la fecha y hora en el formato definido
         f.write(f"[{time}] {msg}\n")
         
@@ -32,25 +27,23 @@ def log_event(msg):
     # implemento excepción para errores de cliente.
 class ClienteError(Exception):
     pass
-
     # implemento excepción para errores de servicio.
 class ServicioError(Exception):
     pass
     # implemento excepción para errores de reserva.
 class ReservaError(Exception):
     pass
-
+    # Defino la clase entidad como clase base.
 class Entidad(ABC):
 
     # constructor general con id para todas las entidades del sistema, lo que permite una identificación única y facilita la gestión de datos.
     def __init__(self, id):
     # Guardo  id para identificar la entidad de forma única, lo que facilita la gestión y búsqueda dentro del sistema.
         self.id = id
-    # método obligatorio para describir la entidad.
+    #uso el método obligatorio para describir la entidad.
     @abstractmethod
     def descripcion(self):
         pass
-    
     # implemento clase Cliente que hereda de Entidad
 class Cliente(Entidad):
     # constructor del cliente con validaciones y manejo de errores
@@ -102,7 +95,7 @@ class Servicio(ABC):
     def validar_parametros(self, **kwargs): 
         pass
     
-# Creo la clase ReservaSala que hereda de Servicio
+    # Creo la clase ReservaSala que hereda de Servicio
 class ReservaSala(Servicio):  
     # Constructor que recibe el tipo de sala (ya sea normal o premium)
     def __init__(self, tipo_sala):
@@ -161,7 +154,7 @@ class AlquilerEquipo(Servicio):
     # Error si no se especifica el equipo para alquiler, lo que es necesario para calcular el costo y describir el servicio correctamente.  
             raise ServicioError("Equipo inválido") 
         
-# clase que representa servicio de asesoría especializado
+    # clase que representa servicio de asesoría especializado
 class Asesoria(Servicio):
     # implemento el constructor que recibe especialida y asigna el nombre del servicio
     def __init__(self, especialidad):
@@ -192,7 +185,7 @@ class Asesoria(Servicio):
     # Pongo el servicio de error si no especifica la espçialidad.
             raise ServicioError("Especialidad requerida")
 
-# clase que representa una reserva en el sistema
+    # clase que representa una reserva en el sistema
 class Reserva:
     # constructor de la reserva
     def __init__(self, cliente, servicio, horas):
@@ -291,7 +284,7 @@ class Sistema:
     def agregar_cliente(self, cliente):
         if not any(c.id == cliente.id for c in self.clientes):
             self.clientes.append(cliente)
-        log_event("Cliente agregado al sistema")
+            log_event("Cliente agregado al sistema")
     # método para agregar un servicio al sistema con validación para evitar duplicados
     def agregar_reserva(self, reserva):
         self.reservas.append(reserva)
@@ -316,5 +309,7 @@ class Sistema:
             if cliente.id == documento:
                 return cliente
         return None
+    # Tutor defino calcular reservas para obtener el costo total de todas las reservas realizadas.
     def calcular_total_reservas(self):
+        # Retorno la suma de los costos de tiodas las reservas reazadas.
         return sum(r.costo or 0 for r in self.reservas)
