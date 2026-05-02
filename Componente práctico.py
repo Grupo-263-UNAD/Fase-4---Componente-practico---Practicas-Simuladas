@@ -29,23 +29,23 @@ def log_event(msg):
         
         
 
-    # implemento excepción para errores de cliente
+    # implemento excepción para errores de cliente.
 class ClienteError(Exception):
     pass
 
-    # implemento excepción para errores de servicio
-class ReservaError(Exception):
-    pass
-    # implemento excepción para errores de servicio
+    # implemento excepción para errores de servicio.
 class ServicioError(Exception):
+    pass
+    # implemento excepción para errores de reserva.
+class ReservaError(Exception):
     pass
 
 class Entidad(ABC):
 
-    # constructor general con id
+    # constructor general con id para todas las entidades del sistema, lo que permite una identificación única y facilita la gestión de datos.
     def __init__(self, id):
+    # Guardo  id para identificar la entidad de forma única, lo que facilita la gestión y búsqueda dentro del sistema.
         self.id = id
-
     # método obligatorio para describir la entidad.
     @abstractmethod
     def descripcion(self):
@@ -92,16 +92,12 @@ class Servicio(ABC):
         self.nombre = nombre  
     # Indico que este método debe ser obligatorio en las clases hijas
     @abstractmethod  
-    # Utilizo el Método para calcular el costo del servicio según horas
-    def calcular_costo(self, horas, **kwargs): 
-    # No implemento aquí porque cada servicio lo define diferente
-        pass 
-    # Método obligatorio para describir el servicio
+    def calcular_costo(self, horas, **kwargs):
+        pass
+    # Método obligatorio para calcular el costo del servicio
     @abstractmethod 
     # Devuelve una descripción del servicio
-    #Se implementa en cada clase hija para dar detalles específicos del servicio
     def descripcion(self):
-        
         pass 
     # Método obligatorio para validar parámetros del servicio
     @abstractmethod  
@@ -139,7 +135,7 @@ class ReservaSala(Servicio):
         # Verifico si el tipo de sala es válido
         if self.tipo_sala not in ["normal", "premium"]:  
             # Lanzo error si no es válido
-            raise ServicioError("Tipo de sala inválido")  
+            raise ServicioError("Tipo de sala inválido")
         
     # Clase que representa alquiler de equipos como servicio.
 class AlquilerEquipo(Servicio): 
@@ -193,6 +189,12 @@ class Asesoria(Servicio):
         if not self.especialidad:
     # lanzo error si la especialidad no es válida
             raise ServicioError("Especialidad requerida")
+        # método para calcular el costo del servicio con opción de descuento
+    def calcular_costo(self, horas, descuento=0):
+        total = 80000 * horas
+        if descuento > 0:
+            total -= total * (descuento / 100)
+        return total
 
 # clase que representa una reserva en el sistema
 class Reserva:
@@ -281,3 +283,40 @@ class Reserva:
             "costo": getattr(self, "costo", None)
         }
         
+    
+    # clase que representa el sistema de reservas, gestionando clientes, servicios y reservas.
+class Sistema:
+    # constructor del sistema que inicializa listas para clientes, servicios y reservas
+    def __init__(self):
+        self.clientes = []
+        self.servicios = []
+        self.reservas = []
+    # método para agregar un cliente al sistema con validación para evitar duplicados
+    def agregar_cliente(self, cliente):
+        if cliente not in self.clientes:
+            self.clientes.append(cliente)
+            log_event("Cliente agregado al sistema")
+    # método para agregar un servicio al sistema con validación para evitar duplicados
+    def agregar_reserva(self, reserva):
+        self.reservas.append(reserva)
+        log_event("Reserva agregada al sistema")
+    # método para agregar un servicio al sistema con validación para evitar duplicados
+    def agregar_servicio(self, servicio):
+        if servicio not in self.servicios:
+            self.servicios.append(servicio)
+            log_event("Servicio agregado al sistema")
+    # método para crear una reserva a partir de un cliente, servicio y horas, con validación y registro en logs
+    def crear_reserva(self, cliente, servicio, horas):
+        reserva = Reserva(cliente, servicio, horas)
+        self.reservas.append(reserva)
+        log_event("Reserva creada desde sistema")
+        return reserva
+    # metodo para listar todas las reservas en el sistema, devolviendo un resumen de cada una
+    def listar_reservas(self):
+        return [r.obtener_resumen() for r in self.reservas]
+    # método para buscar un cliente por su documento, lo que facilita la gestión de clientes dentro del sistema
+    def buscar_cliente(self, documento):
+        for cliente in self.clientes:
+            if cliente.id == documento:
+                return cliente
+        return None
