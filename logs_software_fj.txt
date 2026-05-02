@@ -1,1 +1,17 @@
 [2026-04-29 00:48:15] Reserva creada
+[2026-04-29 23:30:00] Reserva creada
+[2026-04-29 23:41:20] Reserva creada
+[2026-04-29 23:41:20] Cliente creado: Luis
+[2026-04-29 23:41:20] Error cliente: Nombre inválido
+[2026-04-29 23:41:20] Servicio inválido detectado
+[2026-04-29 23:41:20] Reserva creada
+[2026-04-29 23:41:20] Reserva confirmada - Costo: 100000
+[2026-04-29 23:41:20] Proceso de reserva finalizado
+[2026-04-29 23:41:20] Error creando reserva: Horas inválidas
+[2026-04-29 23:41:20] Reserva creada
+[2026-04-29 23:41:20] Reserva confirmada - Costo: 60000
+[2026-04-29 23:41:20] Proceso de reserva finalizado
+[2026-04-29 23:41:20] Error equipo no disponible
+[2026-04-29 23:41:20] Reserva creada
+[2026-04-29 23:41:20] Reserva confirmada - Costo: 80000
+[2026-04-29 23:41:20] Proceso de reserva finalizado
