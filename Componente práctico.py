@@ -25,7 +25,6 @@ def log_event(msg):
         f.write(f"[{time}] {msg}\n")
         
         
-
     # implemento excepción para errores de cliente.
 class ClienteError(Exception):
     pass
@@ -318,9 +317,31 @@ class Sistema:
         # Retorno la suma de los costos de tiodas las reservas reazadas.
         return sum(r.costo or 0 for r in self.reservas)
     
-    
-    
-"""
-Conclusión: El sistema desarrollado por nuestro grupo permite gestionar clientes, servicios y reservas aplicando Programación Orientada a Objetos,
-manejo de excepciones y registro de eventos, garantizando una estructura modular y funcional.
-"""
+
+# Este bloque nos permite ejecutar el sistema y probar todas las clases creadas
+if __name__ == "__main__":
+    # creo un cliente de prueba con nombre y documento válido
+    cliente = Cliente("Jhonier", "123456")
+    # creo un servicio de asesoría con una especialidad definida
+    servicio = Asesoria("Programación en Python")
+    # creo una reserva donde asocio el cliente, el servicio y las horas
+    reserva = Reserva(cliente, servicio, 3)
+    # ejecuto el proceso completo de la reserva (confirmación automática)
+    reserva.procesar()
+    # muestro un encabezado para identificar la salida en consola
+    print("=== RESUMEN DE LA RESERVA ===")
+    # imprimo el resumen completo de la reserva (cliente, servicio, estado, costo, etc.)
+    print(reserva.obtener_resumen())
+    # muestro el estado final de la reserva para validar el flujo del sistema
+    print("\n=== ESTADO FINAL ===")
+    # imprimo el estado actual de la reserva (Confirmada, Pendiente o Cancelada)
+    print("Estado:", reserva.estado)
+    # muestro el nombre del cliente usando el método getter
+    print("Cliente:", cliente.get_nombre())
+    # muestro la descripción del servicio contratado
+    print("Servicio:", servicio.descripcion())
+    # mensaje final para indicar que el sistema se ejecutó correctamente
+    print("\n✔ Sistema ejecutado correctamente. Revisa el archivo de logs.")
+
+    # Conclusión: El sistema desarrollado por nuestro grupo permite gestionar clientes, servicios y reservas aplicando Programación Orientada a Objetos,
+    # manejo de excepciones y registro de eventos, garantizando una estructura modular y funcional.
